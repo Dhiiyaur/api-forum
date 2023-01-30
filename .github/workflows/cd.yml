@@ -1,0 +1,48 @@
+name: Continuous Deployment
+ 
+on: 
+  push:
+    branches:
+      - master
+ 
+jobs:
+  pull-repository:
+    runs-on: ubuntu-latest
+    steps:
+    - name: pull-repository
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/server/api-forum/
+          sudo git pull origin master
+  check-dependency-backend:
+    runs-on: ubuntu-latest
+    needs: pull-repository
+    steps:
+      - name: check-dependency-backend
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/server/api-forum/
+            sudo npm i
+  restart-pm2:
+    runs-on: ubuntu-latest
+    needs: check-dependency-backend
+    steps:
+      - name: restart-pm2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            pm2 restart api-forum
