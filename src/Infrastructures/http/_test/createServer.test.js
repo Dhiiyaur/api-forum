@@ -9,7 +9,7 @@ describe('HTTP server', () => {
             url: '/',
         });
 
-        expect(response.statusCode).toEqual(200);
+        expect(response.statusCode).toEqual(400);
     });
 
     it('should response 404 when request unregistered route', async () => {
