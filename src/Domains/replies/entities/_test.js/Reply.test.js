@@ -41,4 +41,26 @@ describe('a Comment entities', () => {
         const reply = new Reply(payload);
         expect(reply).toEqual(expectedReply);
     });
+
+    it('should create Reply object Correctly if false', () => {
+        const payload = {
+            id: 'reply-123',
+            content: 'reply Content',
+            created_at: '2023-01-09T02:22:11.034Z',
+            username: 'user-123',
+            is_delete: false,
+            comment_id: 'comment-123',
+        };
+
+        const expectedReply = {
+            id: 'reply-123',
+            content: 'reply Content',
+            date: '2023-01-09T02:22:11.034Z',
+            username: 'user-123',
+            comment_id: 'comment-123',
+        };
+
+        const reply = new Reply(payload);
+        expect(reply).toEqual(expectedReply);
+    });
 });

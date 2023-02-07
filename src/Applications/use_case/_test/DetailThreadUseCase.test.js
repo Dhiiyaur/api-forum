@@ -62,5 +62,11 @@ describe('DetailThreadUseCase', () => {
         expect(detailThread.comments[0].id).toStrictEqual(expectedComments[0].id);
         expect(detailThread.comments[0].replies[0].id).toStrictEqual(expectedReplies[0].id);
         expect(detailThread.comments[0].likeCount).toStrictEqual(5);
+
+        expect(mockThreadRepository.verifyAvailableIdThread).toBeCalledWith(useCaseThreadPayload);
+        expect(mockThreadRepository.getDetailThread).toBeCalledWith(useCaseThreadPayload);
+        expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith(useCaseThreadPayload);
+        expect(mockReplyRepository.getReplies).toBeCalledWith(useCaseThreadPayload, expectedComments[0].id);
+        expect(mockLikeRepository.getCountLike).toBeCalledWith(expectedComments[0].id);
     });
 });

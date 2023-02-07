@@ -29,7 +29,10 @@ class CommentRepositoryPostgres extends CommentRepository {
             values: [id, updatedAt],
         };
 
-        await this._pool.query(query);
+        const result = await this._pool.query(query);
+        if (!result.rowCount) {
+            throw new NotFoundError('id comment tidak ditemukan');
+        }
     }
 
     async verifyAvailableIdComment(id) {

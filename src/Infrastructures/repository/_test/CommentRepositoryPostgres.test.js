@@ -130,10 +130,30 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     describe('verifyAvailableIdComment function', () => {
-        it('shold throw not found error', async () => {
+        it('should throw not found error', async () => {
             const commentId = 'comment-123';
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
             expect(commentRepositoryPostgres.verifyAvailableIdComment(commentId)).rejects.toThrowError(NotFoundError);
+        });
+    });
+
+    describe('deleteCommentById function', () => {
+        it('should throw not found error', async () => {
+            const commentId = 'comment-111';
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+            expect(commentRepositoryPostgres.deleteCommentById(commentId)).rejects.toThrowError(NotFoundError);
+        });
+
+        it('should delete comment', async () => {
+            await UsersTableTestHelper.addUser({ id: 'user-123', username: 'karina' });
+            await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
+            await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+            await commentRepositoryPostgres.deleteCommentById('comment-123');
+
+            const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
+            expect(comments[0].is_delete).toEqual(true);
         });
     });
 });

@@ -38,4 +38,24 @@ describe('a Comment entities', () => {
         const comment = new Comment(payload);
         expect(comment).toEqual(expectedComment);
     });
+
+    it('should create Comment object Correctly if false', () => {
+        const payload = {
+            id: 'comment-123',
+            content: 'comment sebuah thread 1',
+            username: 'karina',
+            is_delete: false,
+            created_at: new Date('2022-02-02'),
+        };
+
+        const expectedComment = {
+            id: 'comment-123',
+            content: 'comment sebuah thread 1',
+            username: 'karina',
+            date: new Date('2022-02-02'),
+        };
+
+        const comment = new Comment(payload);
+        expect(comment).toEqual(expectedComment);
+    });
 });
